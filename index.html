@@ -4,41 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Prisma Sudeco</title>
-    <script src="./service.js"></script>
     <style>
+        body {
+            background-color: whitesmoke;
+            color: black;
+        }
+
         .a4-page {
             width: 210mm;
             height: 296mm;
             position: relative;
-            background-image: url('./assets/papel/small.png');
-            /* Substitua pelo caminho da sua imagem */
             background-size: cover;
             background-position: center;
             page-break-inside: avoid;
+            margin: 0;
+            background-image: url('./assets/papel/small.png');
+        }
+
+        .a4-page p {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        #name1,
+        #name2 {
+            font-size: 70px;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        #position1,
+        #position2 {
+            font-size: 40px;
+            margin: 0;
+            padding: 0;
         }
 
         .text-overlay {
             position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 80%;
-            text-align: justify;
-            font-size: 16px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
             color: black;
-            word-wrap: break-word;
+            white-space: pre-line;
+        }
+
+        .space-top {
+            height: 245px;
+        }
+
+        .space-center {
+            height: 295px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container mt-3">
         <h2 class="text-center">Prisma Sudeco</h2>
-        <p class="text-center">Preencha os campos a seguir para confeccionar o prisma de identificação.</p>
-        <form action="">
+        <form>
             <div class="mb-3">
                 <label for="name" class="form-label">Nome</label>
                 <input type="text" class="form-control" id="name" name="name">
@@ -48,47 +77,88 @@
                 <input type="text" class="form-control" id="position" name="position">
             </div>
             <div class="mb-3">
-                <label for="type" class="form-label">Tamanho do prisma:</label>
+                <label class="form-label">Tamanho do prisma:</label>
                 <div>
-                    <input type="radio" name="type" id="small" value="small" checked> <label class="form-label"
-                        for="small">Pequeno</label>
+                    <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem('small')">
+                    <label for="small">Pequeno</label>
                     &nbsp;
-                    <input type="radio" name="type" id="big" value="big"> <label class="form-label"
-                        for="big">Grande</label>
+                    <input type="radio" name="type" id="big" value="big" onchange="trocaImagem('big')">
+                    <label for="big">Grande</label>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="generatePDF()" type="button">Fabricar Prisma</button>
+            <button class="btn btn-success" type="button" onclick="generatePrisma()">Fabricar Prisma</button>
         </form>
-        <!-- Área de visualização da página A4 -->
+        <hr>
         <div id="a4Content" class="a4-page">
-            <div id="overlayText" class="text-overlay"></div>
+            <div class="space-top"></div>
+            <p id="position1"></p>
+            <p id="name1"></p>
+            <div class="space-center"></div>
+            <p id="name2"></p>
+            <p id="position2"></p>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
-        function generatePDF() {
-            // Pegar o texto do formulário
-            const text = document.getElementById('inputText').value;
-            // Inserir o texto na área sobreposta
-            document.getElementById('overlayText').innerText = text;
+        function trocaImagem(type) {
+            const img = document.querySelector(".a4-page");
+            if (type === "small") {
+                img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
+            } else {
+                img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
+            }
+        }
 
-            // Gerar PDF usando a biblioteca html2pdf
+        function generatePrisma() {
+            const name = document.getElementById('name').value;
+            const position = document.getElementById('position').value;
+            const type = document.querySelector('input[name="type"]:checked').value;
+            //const fullText = `${name}\n${position}`;
+
+            const name1 = document.getElementById('name1');
+            const position1 = document.getElementById('position1');
+            const name2 = document.getElementById('name2');
+            const position2 = document.getElementById('position2');
+            const space = document.getElementById('space');
+
+
+            if (type === 'big') {
+                // Prisma grande → texto na vertical, espelhado na horizontal
+                text1.style.transform = 'rotate(-90deg)';
+                text2.style.transform = 'rotate(-90deg) scaleX(-1)';
+
+                text1.style.top = '50%';
+                text1.style.left = '25%';
+                text2.style.top = '50%';
+                text2.style.left = '75%';
+            } else {
+                // Prisma pequeno → texto na horizontal, espelhado na vertical
+                name1.innerText = name
+                position1.innerText = position
+                name1.style.transform = 'rotate(180deg)'
+                position1.style.transform = 'rotate(180deg)'
+                position2.innerText = position
+                name2.innerText = name
+            }
+
+            //text1.style.transform += ' translate(-50%, -50%)';
+            //text2.style.transform += ' translate(-50%, -50%)';
+
+            //container.appendChild(text1);
+            //container.appendChild(text2);
+
             const element = document.getElementById('a4Content');
             const opt = {
-                margin: [0, 0, 0, 0], // Remove as margens
-                filename: 'Prontuario.pdf',
+                margin: 0,
+                filename: 'prisma.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true }, // Captura correta da imagem
+                html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             html2pdf().set(opt).from(element).save();
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
-        crossorigin="anonymous"></script>
-
 </body>
 
 </html>
