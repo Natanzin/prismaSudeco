@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <title>Prisma Sudeco</title>
+    <script src="./service.js"></script>
+    <style>
+        .a4-page {
+            width: 210mm;
+            height: 296mm;
+            position: relative;
+            background-image: url('./assets/papel/small.png');
+            /* Substitua pelo caminho da sua imagem */
+            background-size: cover;
+            background-position: center;
+            page-break-inside: avoid;
+        }
+
+        .text-overlay {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            text-align: justify;
+            font-size: 16px;
+            color: black;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center">Prisma Sudeco</h2>
+        <p class="text-center">Preencha os campos a seguir para confeccionar o prisma de identificação.</p>
+        <form action="">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="name" name="name">
+            </div>
+            <div class="mb-3">
+                <label for="position" class="form-label">Cargo</label>
+                <input type="text" class="form-control" id="position" name="position">
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Tamanho do prisma:</label>
+                <div>
+                    <input type="radio" name="type" id="small" value="small" checked> <label class="form-label"
+                        for="small">Pequeno</label>
+                    &nbsp;
+                    <input type="radio" name="type" id="big" value="big"> <label class="form-label"
+                        for="big">Grande</label>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="generatePDF()" type="button">Fabricar Prisma</button>
+        </form>
+        <!-- Área de visualização da página A4 -->
+        <div id="a4Content" class="a4-page">
+            <div id="overlayText" class="text-overlay"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF() {
+            // Pegar o texto do formulário
+            const text = document.getElementById('inputText').value;
+            // Inserir o texto na área sobreposta
+            document.getElementById('overlayText').innerText = text;
+
+            // Gerar PDF usando a biblioteca html2pdf
+            const element = document.getElementById('a4Content');
+            const opt = {
+                margin: [0, 0, 0, 0], // Remove as margens
+                filename: 'Prontuario.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true }, // Captura correta da imagem
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
