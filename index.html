@@ -67,41 +67,59 @@
             color: black;
             white-space: pre-line;
         }
+
+        fieldset.scheduler-border {
+            border: 1px groove #ddd !important;
+            padding: 0 1.4em 1.4em 1.4em !important;
+            margin: 0 0 1.5em 0 !important;
+            -webkit-box-shadow: 0px 0px 0px 0px #000;
+            box-shadow: 0px 0px 0px 0px #000;
+        }
     </style>
 </head>
 
 <body>
     <div class="container mt-3">
-        <h2 class="text-center">Prisma Sudeco</h2>
+        <h2 class="text-center">Fábrica de Prisma</h2>
         <form>
-            <div class="mb-3">
-                <label for="name" class="form-label">Nome</label>
-                <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="position" class="form-label">Cargo</label>
-                <input type="text" class="form-control" autocomplete="off" id="position" name="position" required>
-                <div>
-                    Tamanho da Fonte:
-                    <input type="radio" name="font" id="fonteG" value="fonteG" onchange="montaPrisma()" checked>
-                    <label for="fonteG">Normal</label>
+            <fieldset class="scheduler-border">
+                <div class="mb-3 mt-2">
+                    Evento:
+                    <input type="radio" name="evento" id="sudeco" value="sudeco" onchange="trocaImagem()" checked>
+                    <label for="sudeco">Sudeco</label>
                     &nbsp;
-                    <input type="radio" name="font" id="fonteP" value="fonteP" onchange="montaPrisma()">
-                    <label for="fonteP"><small>Reduzida</small></label>
+                    <input type="radio" name="evento" id="condel" value="condel" onchange="trocaImagem()">
+                    <label for="condel">Condel</label>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Tamanho do prisma:</label>
-                <div>
-                    <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem('small')">
-                    <label for="small">Pequeno</label>
-                    &nbsp;
-                    <input type="radio" name="type" id="big" value="big" onchange="trocaImagem('big')">
-                    <label for="big">Grande</label>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nome</label>
+                    <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
                 </div>
-            </div>
-            <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
-            <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
+                <div class="mb-3">
+                    <label for="position" class="form-label">Cargo</label>
+                    <input type="text" class="form-control" autocomplete="off" id="position" name="position" required>
+                    <div>
+                        Tamanho da Fonte:
+                        <input type="radio" name="font" id="fonteG" value="fonteG" onchange="montaPrisma()" checked>
+                        <label for="fonteG">Normal</label>
+                        &nbsp;
+                        <input type="radio" name="font" id="fonteP" value="fonteP" onchange="montaPrisma()">
+                        <label for="fonteP"><small>Reduzida</small></label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tamanho do prisma:</label>
+                    <div>
+                        <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem()">
+                        <label for="small" id="prismaPequeno">Pequeno</label>
+                        &nbsp;
+                        <input type="radio" name="type" id="big" value="big" onchange="trocaImagem()">
+                        <label for="big">Grande</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
+                <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
+            </fieldset>
         </form>
         <hr>
         <div id="a4Content" class="a4-page">
@@ -119,16 +137,29 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
-        function trocaImagem(type) {
+        function trocaImagem() {
             const img = document.querySelector(".a4-page");
-            if (type === "small") {
-                img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
-                img.style.width = '210mm'
-                img.style.height = '296mm'
+            const evento = document.querySelector('input[name="evento"]:checked').value;
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const typeBig = document.getElementById('big')
+            const txtPequeno = document.getElementById('prismaPequeno')
+            if (evento == 'sudeco') {
+                txtPequeno.style.textDecoration = 'none'
+                if (type === "small") {
+                    img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
+                    img.style.width = '210mm'
+                    img.style.height = '296mm'
+                } else {
+                    img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
+                    img.style.width = '296mm'
+                    img.style.height = '210mm'
+                }
             } else {
-                img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
+                img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
                 img.style.width = '296mm'
                 img.style.height = '210mm'
+                typeBig.checked = true
+                txtPequeno.style.textDecoration = 'line-through'
             }
         }
 
@@ -137,9 +168,10 @@
             const position = document.getElementById('position').value;
             const type = document.querySelector('input[name="type"]:checked').value;
             const fonte = document.querySelector('input[name="font"]:checked').value;
+            const evento = document.querySelector('input[name="evento"]:checked').value;
 
             if (name == '' || position == '') {
-                alert("Campo vazio!!")
+                //alert("Campo vazio!!")
                 return
             }
 
@@ -150,8 +182,6 @@
             const position2 = document.getElementById('position2');
             const spaceTop = document.getElementById('space-top');
             const spaceCenter = document.getElementById('space-center');
-
-
 
             if (type === 'big') {
                 // Prisma grande → texto na vertical, espelhado na horizontal
