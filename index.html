@@ -68,6 +68,14 @@
             <div class="mb-3">
                 <label for="position" class="form-label">Cargo</label>
                 <input type="text" class="form-control" autocomplete="off" id="position" name="position" required>
+                <div>
+                    Tamanho da Fonte:
+                    <input type="radio" name="font" id="fonteG" value="fonteG" onchange="montaPrisma()" checked>
+                    <label for="fonteG">Normal</label>
+                    &nbsp;
+                    <input type="radio" name="font" id="fonteP" value="fonteP" onchange="montaPrisma()">
+                    <label for="fonteP"><small>Reduzida</small></label>
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Tamanho do prisma:</label>
@@ -112,6 +120,7 @@
             const name = document.getElementById('name').value;
             const position = document.getElementById('position').value;
             const type = document.querySelector('input[name="type"]:checked').value;
+            const fonte = document.querySelector('input[name="font"]:checked').value;
 
             if (name == '' || position == '') {
                 alert("Campo vazio!!")
@@ -126,6 +135,8 @@
             const spaceTop = document.getElementById('space-top');
             const spaceCenter = document.getElementById('space-center');
 
+
+
             if (type === 'big') {
                 // Prisma grande → texto na vertical, espelhado na horizontal
                 name1.innerText = name
@@ -136,6 +147,18 @@
                 name2.innerText = name
                 spaceTop.style.height = '100px'
                 spaceCenter.style.height = '320px'
+
+                if (fonte == 'fonteP') {
+                    position1.style.fontSize = '30px'
+                    position2.style.fontSize = '30px'
+                    spaceTop.style.height = '100px'
+                    spaceCenter.style.height = '330px'
+                } else {
+                    position1.style.fontSize = '40px'
+                    position2.style.fontSize = '40px'
+                    spaceTop.style.height = '100px'
+                    spaceCenter.style.height = '320px'
+                }
             } else {
                 // Prisma pequeno → texto na horizontal, espelhado na vertical
                 name1.innerText = name
@@ -144,9 +167,18 @@
                 position1.style.transform = 'rotate(180deg)'
                 position2.innerText = position
                 name2.innerText = name
-                spaceTop.style.height = '270px'
-                spaceCenter.style.height = '300px'
 
+                if (fonte == 'fonteP') {
+                    position1.style.fontSize = '30px'
+                    position2.style.fontSize = '30px'
+                    spaceTop.style.height = '280px'
+                    spaceCenter.style.height = '305px'
+                } else {
+                    position1.style.fontSize = '40px'
+                    position2.style.fontSize = '40px'
+                    spaceTop.style.height = '270px'
+                    spaceCenter.style.height = '300px'
+                }
             }
         }
 
