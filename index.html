@@ -42,6 +42,7 @@
             font-size: 40px;
             margin: 0;
             padding: 0;
+            line-height: 80%;
         }
 
         .text-overlay {
@@ -53,14 +54,6 @@
             color: black;
             white-space: pre-line;
         }
-
-        .space-top {
-            height: 245px;
-        }
-
-        .space-center {
-            height: 295px;
-        }
     </style>
 </head>
 
@@ -70,11 +63,11 @@
         <form>
             <div class="mb-3">
                 <label for="name" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
             </div>
             <div class="mb-3">
                 <label for="position" class="form-label">Cargo</label>
-                <input type="text" class="form-control" id="position" name="position">
+                <input type="text" class="form-control" autocomplete="off" id="position" name="position" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Tamanho do prisma:</label>
@@ -86,14 +79,15 @@
                     <label for="big">Grande</label>
                 </div>
             </div>
-            <button class="btn btn-success" type="button" onclick="generatePrisma()">Fabricar Prisma</button>
+            <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
+            <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
         </form>
         <hr>
         <div id="a4Content" class="a4-page">
-            <div class="space-top"></div>
+            <div id="space-top"></div>
             <p id="position1"></p>
             <p id="name1"></p>
-            <div class="space-center"></div>
+            <div id="space-center"></div>
             <p id="name2"></p>
             <p id="position2"></p>
         </div>
@@ -105,33 +99,43 @@
             const img = document.querySelector(".a4-page");
             if (type === "small") {
                 img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
+                img.style.width = '210mm'
+                img.style.height = '296mm'
             } else {
                 img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
+                img.style.width = '296mm'
+                img.style.height = '210mm'
             }
         }
 
-        function generatePrisma() {
+        function montaPrisma() {
             const name = document.getElementById('name').value;
             const position = document.getElementById('position').value;
             const type = document.querySelector('input[name="type"]:checked').value;
-            //const fullText = `${name}\n${position}`;
 
+            if (name == '' || position == '') {
+                alert("Campo vazio!!")
+                return
+            }
+
+            const page = document.getElementById('a4-page')
             const name1 = document.getElementById('name1');
             const position1 = document.getElementById('position1');
             const name2 = document.getElementById('name2');
             const position2 = document.getElementById('position2');
-            const space = document.getElementById('space');
-
+            const spaceTop = document.getElementById('space-top');
+            const spaceCenter = document.getElementById('space-center');
 
             if (type === 'big') {
                 // Prisma grande → texto na vertical, espelhado na horizontal
-                text1.style.transform = 'rotate(-90deg)';
-                text2.style.transform = 'rotate(-90deg) scaleX(-1)';
-
-                text1.style.top = '50%';
-                text1.style.left = '25%';
-                text2.style.top = '50%';
-                text2.style.left = '75%';
+                name1.innerText = name
+                position1.innerText = position
+                name1.style.transform = 'rotate(180deg)'
+                position1.style.transform = 'rotate(180deg)'
+                position2.innerText = position
+                name2.innerText = name
+                spaceTop.style.height = '100px'
+                spaceCenter.style.height = '320px'
             } else {
                 // Prisma pequeno → texto na horizontal, espelhado na vertical
                 name1.innerText = name
@@ -140,21 +144,34 @@
                 position1.style.transform = 'rotate(180deg)'
                 position2.innerText = position
                 name2.innerText = name
+                spaceTop.style.height = '270px'
+                spaceCenter.style.height = '300px'
+
             }
+        }
 
-            //text1.style.transform += ' translate(-50%, -50%)';
-            //text2.style.transform += ' translate(-50%, -50%)';
+        function generatePrisma() {
+            montaPrisma()
 
-            //container.appendChild(text1);
-            //container.appendChild(text2);
+            const type = document.querySelector('input[name="type"]:checked').value;
+            const name = document.getElementById('name').value;
+            let orientation
+            let nameFile
+            if (type == 'big') {
+                orientation = 'landscape'
+                nameFile = 'prisma grande - ' + name + '.pdf'
+            } else {
+                orientation = 'portrait'
+                nameFile = 'prisma pequeno - ' + name + '.pdf'
+            }
 
             const element = document.getElementById('a4Content');
             const opt = {
                 margin: 0,
-                filename: 'prisma.pdf',
+                filename: nameFile,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
             };
             html2pdf().set(opt).from(element).save();
         }
