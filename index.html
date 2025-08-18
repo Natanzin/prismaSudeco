@@ -119,7 +119,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="organ" class="form-label">Órgão</label>
-                    <input type="text" class="form-control" autocomplete="off" id="organ" name="organ" required>
+                    <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Tamanho do prisma:</label>
@@ -160,6 +160,7 @@
             const typeBig = document.getElementById('big')
             const txtPequeno = document.getElementById('prismaPequeno')
             if (evento == 'sudeco') {
+                document.getElementById('organ').disabled = true
                 txtPequeno.style.textDecoration = 'none'
                 if (type === "small") {
                     img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
@@ -171,6 +172,7 @@
                     img.style.height = '210mm'
                 }
             } else {
+                document.getElementById('organ').disabled = false
                 img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
                 img.style.width = '296mm'
                 img.style.height = '210mm'
@@ -238,11 +240,12 @@
                 }
 
                 if (evento === 'condel' && organ != '') {
+                    document.getElementById('organ').disabled = false
                     organ1.innerText = organ
                     organ1.style.transform = 'rotate(180deg)'
                     organ2.innerText = organ
                     spaceCenter.style.height = '230px'
-                }
+                } 
             } else {
                 // Prisma pequeno → texto na horizontal, espelhado na vertical
                 name1.innerText = name
