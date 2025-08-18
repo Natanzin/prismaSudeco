@@ -48,6 +48,7 @@
             font-weight: bold;
             margin: 0;
             padding: 0;
+            text-transform: capitalize;
         }
 
         #position1,
@@ -56,6 +57,15 @@
             margin: 0;
             padding: 0;
             line-height: 80%;
+        }
+
+        #organ1,
+        #organ2 {
+            font-size: 30px;
+            margin: 0;
+            padding: 0;
+            text-transform: uppercase;
+            margin: 5px 0;
         }
 
         .text-overlay {
@@ -108,6 +118,10 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label for="organ" class="form-label">Órgão</label>
+                    <input type="text" class="form-control" autocomplete="off" id="organ" name="organ" required>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Tamanho do prisma:</label>
                     <div>
                         <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem()">
@@ -124,11 +138,13 @@
         <hr>
         <div id="a4Content" class="a4-page">
             <div id="space-top"></div>
+            <p id="organ1"></p>
             <p id="position1"></p>
             <p id="name1"></p>
             <div id="space-center"></div>
             <p id="name2"></p>
             <p id="position2"></p>
+            <p id="organ2"></p>
         </div>
         <footer>
             Feito por Natan - Ascom/Sudeco
@@ -164,17 +180,16 @@
         }
 
         function montaPrisma() {
+
+            //formulário
             const name = document.getElementById('name').value;
+            const organ = document.getElementById('organ').value;
             const position = document.getElementById('position').value;
             const type = document.querySelector('input[name="type"]:checked').value;
             const fonte = document.querySelector('input[name="font"]:checked').value;
             const evento = document.querySelector('input[name="evento"]:checked').value;
 
-            if (name == '' || position == '') {
-                //alert("Campo vazio!!")
-                return
-            }
-
+            //elementos da página
             const page = document.getElementById('a4-page')
             const name1 = document.getElementById('name1');
             const position1 = document.getElementById('position1');
@@ -182,8 +197,24 @@
             const position2 = document.getElementById('position2');
             const spaceTop = document.getElementById('space-top');
             const spaceCenter = document.getElementById('space-center');
+            const organ1 = document.getElementById('organ1');
+            const organ2 = document.getElementById('organ2');
 
+            //faz a validação dos campos
+            if (name == '' || position == '') {
+                //alert("Campo vazio!!")
+                return
+            }
+
+            //monta o prisma
             if (type === 'big') {
+                //limpa todos os campos
+                name1.innerText = ''
+                position1.innerText = ''
+                organ1.innerText = ''
+                name2.innerText = ''
+                position2.innerText = ''
+                organ2.innerText = ''
                 // Prisma grande → texto na vertical, espelhado na horizontal
                 name1.innerText = name
                 position1.innerText = position
@@ -204,6 +235,13 @@
                     position2.style.fontSize = '40px'
                     spaceTop.style.height = '100px'
                     spaceCenter.style.height = '320px'
+                }
+
+                if (evento === 'condel' && organ != '') {
+                    organ1.innerText = organ
+                    organ1.style.transform = 'rotate(180deg)'
+                    organ2.innerText = organ
+                    spaceCenter.style.height = '230px'
                 }
             } else {
                 // Prisma pequeno → texto na horizontal, espelhado na vertical
