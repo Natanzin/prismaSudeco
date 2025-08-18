@@ -203,10 +203,10 @@
             const organ2 = document.getElementById('organ2');
 
             //faz a validação dos campos
-            if (name == '' || position == '') {
+            /*if (name == '' || position == '') {
                 //alert("Campo vazio!!")
                 return
-            }
+            }*/
 
             //monta o prisma
             if (type === 'big') {
@@ -265,6 +265,9 @@
                     position2.style.fontSize = '40px'
                     spaceTop.style.height = '270px'
                     spaceCenter.style.height = '300px'
+                }
+                if (position == ''){
+                    spaceCenter.style.height = '350px'
                 }
             }
         }
