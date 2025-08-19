@@ -6,138 +6,90 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Prisma Sudeco</title>
-    <style>
-        body {
-            background-color: whitesmoke;
-            color: black;
-            padding-bottom: 50px;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 5px 0;
-            font-size: 10px;
-        }
-
-        .a4-page {
-            width: 210mm;
-            height: 296mm;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            page-break-inside: avoid;
-            margin: 0;
-            background-image: url('./assets/papel/small.png');
-        }
-
-        .a4-page p {
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        #name1,
-        #name2 {
-            font-size: 70px;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-            text-transform: capitalize;
-        }
-
-        #position1,
-        #position2 {
-            font-size: 40px;
-            margin: 0;
-            padding: 0;
-            line-height: 80%;
-        }
-
-        #organ1,
-        #organ2 {
-            font-size: 30px;
-            margin: 0;
-            padding: 0;
-            text-transform: uppercase;
-            margin: 5px 0;
-        }
-
-        .text-overlay {
-            position: absolute;
-            width: 80%;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: black;
-            white-space: pre-line;
-        }
-
-        fieldset.scheduler-border {
-            border: 1px groove #ddd !important;
-            padding: 0 1.4em 1.4em 1.4em !important;
-            margin: 0 0 1.5em 0 !important;
-            -webkit-box-shadow: 0px 0px 0px 0px #000;
-            box-shadow: 0px 0px 0px 0px #000;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="./service.js"></script>
 </head>
 
 <body>
+    <header>
+        <img src="./assets/logo/logoColored.png" height="27px" alt="">
+        Fábrica de Prisma
+    </header>
     <div class="container mt-3">
-        <h2 class="text-center">Fábrica de Prisma</h2>
         <form>
-            <fieldset class="scheduler-border">
-                <div class="mb-3 mt-2">
-                    Evento:
-                    <input type="radio" name="evento" id="sudeco" value="sudeco" onchange="trocaImagem()" checked>
-                    <label for="sudeco">Sudeco</label>
+            <div class="mb-3 mt-2">
+                <label class="form-label fw-bold" for="sudeco">Evento:</label>
+                <input type="radio" name="evento" id="sudeco" value="sudeco" onchange="trocaImagem()" checked>
+                <label class="form-label" for="sudeco">Sudeco</label>
+                &nbsp;
+                <input type="radio" name="evento" id="condel" value="condel" onchange="trocaImagem()">
+                <label class="form-label" for="condel">Condel</label>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label fw-bold">Nome</label>
+                <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-9">
+                        <label for="position" class="form-label fw-bold">Cargo</label>
+                        <input type="text" class="form-control" autocomplete="off" id="position" name="position"
+                            required>
+                    </div>
+                    <div class="col-3">
+                        <label for="fontPosition" class="form-label fw-bold">Tamanho da Fonte</label>
+                        <select class="form-select" name="fontePosition" id="fontePosition" onchange="montaPrisma()">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30">30</option>
+                            <option value="35">35</option>
+                            <option value="40" selected>40</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-9">
+                        <label for="organ" class="form-label fw-bold">Órgão</label>
+                        <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ"
+                            required>
+                    </div>
+                    <div class="col-3">
+                        <label for="fontOrgan" class="form-label fw-bold">Tamanho da Fonte</label>
+                        <select class="form-select" disabled name="fontOrgan" id="fontOrgan" onchange="montaPrisma()">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                            <option value="30" selected>30</option>
+                            <option value="35">35</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tamanho do prisma:</label>
+                <div>
+                    <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem()">
+                    <label for="small" id="prismaPequeno">Pequeno</label>
                     &nbsp;
-                    <input type="radio" name="evento" id="condel" value="condel" onchange="trocaImagem()">
-                    <label for="condel">Condel</label>
+                    <input type="radio" name="type" id="big" value="big" onchange="trocaImagem()">
+                    <label for="big">Grande</label>
                 </div>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nome</label>
-                    <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="position" class="form-label">Cargo</label>
-                    <input type="text" class="form-control" autocomplete="off" id="position" name="position" required>
-                    <div>
-                        Tamanho da Fonte:
-                        <input type="radio" name="font" id="fonteG" value="fonteG" onchange="montaPrisma()" checked>
-                        <label for="fonteG">Normal</label>
-                        &nbsp;
-                        <input type="radio" name="font" id="fonteP" value="fonteP" onchange="montaPrisma()">
-                        <label for="fonteP"><small>Reduzida</small></label>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="organ" class="form-label">Órgão</label>
-                    <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Tamanho do prisma:</label>
-                    <div>
-                        <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem()">
-                        <label for="small" id="prismaPequeno">Pequeno</label>
-                        &nbsp;
-                        <input type="radio" name="type" id="big" value="big" onchange="trocaImagem()">
-                        <label for="big">Grande</label>
-                    </div>
-                </div>
-                <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
-                <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
-            </fieldset>
+            </div>
+            <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
+            <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
         </form>
         <hr>
         <div id="a4Content" class="a4-page">
-            <div id="space-top"></div>
             <p id="organ1"></p>
             <p id="position1"></p>
             <p id="name1"></p>
@@ -150,154 +102,7 @@
             Feito por Natan - Ascom/Sudeco
         </footer>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script>
-        function trocaImagem() {
-            const img = document.querySelector(".a4-page");
-            const evento = document.querySelector('input[name="evento"]:checked').value;
-            const type = document.querySelector('input[name="type"]:checked').value;
-            const typeBig = document.getElementById('big')
-            const txtPequeno = document.getElementById('prismaPequeno')
-            if (evento == 'sudeco') {
-                document.getElementById('organ').disabled = true
-                txtPequeno.style.textDecoration = 'none'
-                if (type === "small") {
-                    img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
-                    img.style.width = '210mm'
-                    img.style.height = '296mm'
-                } else {
-                    img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
-                    img.style.width = '296mm'
-                    img.style.height = '210mm'
-                }
-            } else {
-                document.getElementById('organ').disabled = false
-                img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
-                img.style.width = '296mm'
-                img.style.height = '210mm'
-                typeBig.checked = true
-                txtPequeno.style.textDecoration = 'line-through'
-            }
-        }
-
-        function montaPrisma() {
-
-            //formulário
-            const name = document.getElementById('name').value;
-            const organ = document.getElementById('organ').value;
-            const position = document.getElementById('position').value;
-            const type = document.querySelector('input[name="type"]:checked').value;
-            const fonte = document.querySelector('input[name="font"]:checked').value;
-            const evento = document.querySelector('input[name="evento"]:checked').value;
-
-            //elementos da página
-            const page = document.getElementById('a4-page')
-            const name1 = document.getElementById('name1');
-            const position1 = document.getElementById('position1');
-            const name2 = document.getElementById('name2');
-            const position2 = document.getElementById('position2');
-            const spaceTop = document.getElementById('space-top');
-            const spaceCenter = document.getElementById('space-center');
-            const organ1 = document.getElementById('organ1');
-            const organ2 = document.getElementById('organ2');
-
-            //faz a validação dos campos
-            /*if (name == '' || position == '') {
-                //alert("Campo vazio!!")
-                return
-            }*/
-
-            //monta o prisma
-            if (type === 'big') {
-                //limpa todos os campos
-                name1.innerText = ''
-                position1.innerText = ''
-                organ1.innerText = ''
-                name2.innerText = ''
-                position2.innerText = ''
-                organ2.innerText = ''
-                // Prisma grande → texto na vertical, espelhado na horizontal
-                name1.innerText = name
-                position1.innerText = position
-                name1.style.transform = 'rotate(180deg)'
-                position1.style.transform = 'rotate(180deg)'
-                position2.innerText = position
-                name2.innerText = name
-                spaceTop.style.height = '100px'
-                spaceCenter.style.height = '320px'
-
-                if (fonte == 'fonteP') {
-                    position1.style.fontSize = '30px'
-                    position2.style.fontSize = '30px'
-                    spaceTop.style.height = '100px'
-                    spaceCenter.style.height = '330px'
-                } else {
-                    position1.style.fontSize = '40px'
-                    position2.style.fontSize = '40px'
-                    spaceTop.style.height = '100px'
-                    spaceCenter.style.height = '320px'
-                }
-
-                if (evento === 'condel' && organ != '') {
-                    document.getElementById('organ').disabled = false
-                    organ1.innerText = organ
-                    organ1.style.transform = 'rotate(180deg)'
-                    organ2.innerText = organ
-                    spaceCenter.style.height = '230px'
-                } 
-            } else {
-                // Prisma pequeno → texto na horizontal, espelhado na vertical
-                name1.innerText = name
-                position1.innerText = position
-                name1.style.transform = 'rotate(180deg)'
-                position1.style.transform = 'rotate(180deg)'
-                position2.innerText = position
-                name2.innerText = name
-
-                if (fonte == 'fonteP') {
-                    position1.style.fontSize = '30px'
-                    position2.style.fontSize = '30px'
-                    spaceTop.style.height = '280px'
-                    spaceCenter.style.height = '305px'
-                } else {
-                    position1.style.fontSize = '40px'
-                    position2.style.fontSize = '40px'
-                    spaceTop.style.height = '270px'
-                    spaceCenter.style.height = '300px'
-                }
-                if (position == ''){
-                    spaceCenter.style.height = '350px'
-                }
-            }
-        }
-
-        function generatePrisma() {
-            montaPrisma()
-
-            const type = document.querySelector('input[name="type"]:checked').value;
-            const name = document.getElementById('name').value;
-            let orientation
-            let nameFile
-            if (type == 'big') {
-                orientation = 'landscape'
-                nameFile = 'prisma grande - ' + name + '.pdf'
-            } else {
-                orientation = 'portrait'
-                nameFile = 'prisma pequeno - ' + name + '.pdf'
-            }
-
-            const element = document.getElementById('a4Content');
-            const opt = {
-                margin: 0,
-                filename: nameFile,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
 </body>
 
 </html>
