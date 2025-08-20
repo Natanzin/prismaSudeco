@@ -3,7 +3,9 @@ function trocaImagem() {
     const evento = document.querySelector('input[name="evento"]:checked').value;
     const type = document.querySelector('input[name="type"]:checked').value;
     const typeBig = document.getElementById('big')
+    const typeSmall = document.getElementById('small')
     const txtPequeno = document.getElementById('prismaPequeno')
+    const txtGrande = document.getElementById('prismaGrande')
     if (evento == 'sudeco') {
         document.getElementById('organ').disabled = true
         document.getElementById('organ').value = ""
@@ -18,7 +20,7 @@ function trocaImagem() {
             img.style.width = '296mm'
             img.style.height = '210mm'
         }
-    } else {
+    } else if (evento == 'condel') {
         document.getElementById('organ').disabled = false
         document.getElementById('fontOrgan').disabled = false
         img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
@@ -26,6 +28,16 @@ function trocaImagem() {
         img.style.height = '210mm'
         typeBig.checked = true
         txtPequeno.style.textDecoration = 'line-through'
+        txtGrande.style.textDecoration = 'none'
+    } else if (evento == 'coaride') {
+        document.getElementById('organ').disabled = false
+        document.getElementById('fontOrgan').disabled = false
+        img.style.backgroundImage = "url('./assets/papel/coaride.png')"; // Fundo prisma pequeno
+        img.style.width = '210mm'
+        img.style.height = '296mm'
+        typeSmall.checked = true
+        txtGrande.style.textDecoration = 'line-through'
+        txtPequeno.style.textDecoration = 'none'
     }
 }
 
@@ -158,16 +170,16 @@ function montaPrisma() {
         spaceCenter.style.height = '330px'
         position1.style.margin = '0 60px'
         position2.style.margin = '0 60px'
-        
+
         if (evento == 'condel') {
-            spaceCenter.style.height = '280px'
+            spaceCenter.style.height = '300px'
             position1.style.margin = '0 80px'
             position2.style.margin = '0 80px'
             if (organ != '') {
                 organ1.innerText = organ
                 organ1.style.transform = 'rotate(180deg)'
                 organ2.innerText = organ
-                spaceCenter.style.height = '240px'
+                spaceCenter.style.height = '280px'
             }
         }
     } else {
@@ -181,6 +193,18 @@ function montaPrisma() {
         spaceCenter.style.height = '340px'
         position1.style.margin = '0 55px'
         position2.style.margin = '0 55px'
+        
+        if (evento == 'coaride') {
+            organ1.innerText = organ
+            organ1.style.transform = 'rotate(180deg)'
+            organ2.innerText = organ
+            spaceCenter.style.height = '210px'
+            position1.style.margin = '0 75px'
+            position2.style.margin = '0 75px'
+            if (organ == '') {
+                spaceCenter.style.height = '270px'
+            }
+        }
     }
 }
 
@@ -200,10 +224,15 @@ function generatePrisma() {
             nameFile = 'prisma grande condel - ' + name + '.pdf'
         } else if (evento == 'sudeco') {
             nameFile = 'prisma grande sudeco - ' + name + '.pdf'
-        }
+        } 
     } else {
         orientation = 'portrait'
-        nameFile = 'prisma pequeno - ' + name + '.pdf'
+        if(evento == 'sudeco'){
+            nameFile = 'prisma pequeno sudeco - ' + name + '.pdf'
+        }
+        else if(evento == 'coaride'){
+            nameFile = 'prisma pequeno coaride - ' + name + '.pdf'
+        }
     }
 
     const element = document.getElementById('a4Content');
