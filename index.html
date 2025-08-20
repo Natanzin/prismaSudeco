@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Prisma Sudeco</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/9dd9d649b8.js" crossorigin="anonymous"></script>
     <script src="./service.js"></script>
 </head>
 
@@ -18,26 +19,28 @@
     <div class="container mt-3">
         <form>
             <div class="mb-3 mt-2">
-                <label class="form-label fw-bold" for="sudeco">Evento:</label>
-                <input type="radio" name="evento" id="sudeco" value="sudeco" onchange="trocaImagem()" checked>
-                <label class="form-label" for="sudeco">Sudeco</label>
-                &nbsp;
-                <input type="radio" name="evento" id="condel" value="condel" onchange="trocaImagem()">
-                <label class="form-label" for="condel">Condel</label>
+                <label class="form-label fw-bold" for="sudeco"><i class="fa-solid fa-calendar-days"></i> Evento</label>
+                <div>
+                    <input type="radio" name="evento" id="sudeco" value="sudeco" onchange="trocaImagem()" checked>
+                    <label class="form-label" for="sudeco"><i class="fa-solid fa-location-dot"></i> Sudeco</label>
+                    &nbsp;
+                    <input type="radio" name="evento" id="condel" value="condel" onchange="trocaImagem()">
+                    <label class="form-label" for="condel"><i class="fa-solid fa-location-dot"></i> Condel</label>
+                </div>
             </div>
             <div class="mb-3">
-                <label for="name" class="form-label fw-bold">Nome</label>
+                <label for="name" class="form-label fw-bold"><i class="fa-solid fa-user-tie"></i> Nome</label>
                 <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
             </div>
             <div class="mb-3">
                 <div class="row">
                     <div class="col-9">
-                        <label for="position" class="form-label fw-bold">Cargo</label>
+                        <label for="position" class="form-label fw-bold"><i class="fa-solid fa-id-card"></i> Cargo</label>
                         <input type="text" class="form-control" autocomplete="off" id="position" name="position"
                             required>
                     </div>
                     <div class="col-3">
-                        <label for="fontPosition" class="form-label fw-bold">Tamanho da Fonte</label>
+                        <label for="fontPosition" class="form-label fw-bold"><i class="fa-solid fa-text-height"></i> Tamanho da Fonte</label>
                         <select class="form-select" name="fontePosition" id="fontePosition" onchange="montaPrisma()">
                             <option value="5">5</option>
                             <option value="10">10</option>
@@ -55,12 +58,12 @@
             <div class="mb-3">
                 <div class="row">
                     <div class="col-9">
-                        <label for="organ" class="form-label fw-bold">Órgão</label>
+                        <label for="organ" class="form-label fw-bold"><i class="fa-solid fa-building-user"></i> Órgão</label>
                         <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ"
                             required>
                     </div>
                     <div class="col-3">
-                        <label for="fontOrgan" class="form-label fw-bold">Tamanho da Fonte</label>
+                        <label for="fontOrgan" class="form-label fw-bold"><i class="fa-solid fa-text-height"></i> Tamanho da Fonte</label>
                         <select class="form-select" disabled name="fontOrgan" id="fontOrgan" onchange="montaPrisma()">
                             <option value="5">5</option>
                             <option value="10">10</option>
@@ -76,17 +79,17 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label class="form-label">Tamanho do prisma:</label>
+                <label class="form-label fw-bold"><i class="fa-solid fa-square-caret-up"></i> Tamanho do prisma</label>
                 <div>
                     <input type="radio" name="type" id="small" value="small" checked onchange="trocaImagem()">
-                    <label for="small" id="prismaPequeno">Pequeno</label>
+                    <label for="small" id="prismaPequeno"><i class="fa-solid fa-hand-lizard"></i> Pequeno</label>
                     &nbsp;
                     <input type="radio" name="type" id="big" value="big" onchange="trocaImagem()">
-                    <label for="big">Grande</label>
+                    <label for="big"><i class="fa-solid fa-hands-holding"></i> Grande</label>
                 </div>
             </div>
-            <button class="btn btn-primary" type="button" onclick="montaPrisma()">Pré-visualizar Prisma</button>
-            <button class="btn btn-success" type="button" onclick="generatePrisma()">Exportar Prisma</button>
+            <button class="btn btn-primary" type="button" onclick="montaPrisma()"><i class="fa-solid fa-eye"></i> Pré-visualizar Prisma</button>
+            <button class="btn btn-success" type="button" onclick="generatePrisma()"><i class="fa-solid fa-file-pdf"></i> Exportar Prisma</button>
         </form>
         <hr>
         <div id="a4Content" class="a4-page">
@@ -99,7 +102,7 @@
             <p id="organ2"></p>
         </div>
         <footer>
-            Feito por Natan - Ascom/Sudeco
+            Feito por Natan Silva - Ascom/Sudeco
         </footer>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
