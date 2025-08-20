@@ -11,6 +11,7 @@ function trocaImagem() {
         document.getElementById('organ').value = ""
         document.getElementById('fontOrgan').disabled = true
         txtPequeno.style.textDecoration = 'none'
+        txtGrande.style.textDecoration = 'none'
         if (type === "small") {
             img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
             img.style.width = '210mm'
@@ -39,6 +40,7 @@ function trocaImagem() {
         txtGrande.style.textDecoration = 'line-through'
         txtPequeno.style.textDecoration = 'none'
     }
+    montaPrisma()
 }
 
 function montaPrisma() {
@@ -193,7 +195,7 @@ function montaPrisma() {
         spaceCenter.style.height = '340px'
         position1.style.margin = '0 55px'
         position2.style.margin = '0 55px'
-        
+
         if (evento == 'coaride') {
             organ1.innerText = organ
             organ1.style.transform = 'rotate(180deg)'
@@ -224,13 +226,13 @@ function generatePrisma() {
             nameFile = 'prisma grande condel - ' + name + '.pdf'
         } else if (evento == 'sudeco') {
             nameFile = 'prisma grande sudeco - ' + name + '.pdf'
-        } 
+        }
     } else {
         orientation = 'portrait'
-        if(evento == 'sudeco'){
+        if (evento == 'sudeco') {
             nameFile = 'prisma pequeno sudeco - ' + name + '.pdf'
         }
-        else if(evento == 'coaride'){
+        else if (evento == 'coaride') {
             nameFile = 'prisma pequeno coaride - ' + name + '.pdf'
         }
     }
@@ -244,4 +246,29 @@ function generatePrisma() {
         jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
     };
     html2pdf().set(opt).from(element).save();
+}
+
+//imprimir prisma
+function printPrisma() {
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const element = document.getElementById('a4Content');
+    let orientation
+
+    if (type == 'big') {
+        orientation = 'landscape'
+    } else {
+        orientation = 'portrait'
+
+    }
+    const opt = {
+        margin: 0,
+        filename: 'document.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
+    };
+    html2pdf().set(opt).from(element).outputPdf('bloburl').then((pdfUrl) => {
+        const win = window.open(pdfUrl)
+        win.print()
+    });
 }

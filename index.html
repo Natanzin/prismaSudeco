@@ -33,13 +33,13 @@
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label fw-bold"><i class="fa-solid fa-user-tie"></i> Nome</label>
-                <input type="text" class="form-control" autocomplete="off" id="name" name="name" required>
+                <input type="text" class="form-control" autocomplete="off" id="name" name="name" onblur="montaPrisma()" required>
             </div>
             <div class="mb-3">
                 <div class="row">
                     <div class="col-9">
                         <label for="position" class="form-label fw-bold"><i class="fa-solid fa-id-card"></i> Cargo</label>
-                        <input type="text" class="form-control" autocomplete="off" id="position" name="position"
+                        <input type="text" class="form-control" autocomplete="off" id="position" name="position" onblur="montaPrisma()"
                             required>
                     </div>
                     <div class="col-3">
@@ -62,7 +62,7 @@
                 <div class="row">
                     <div class="col-9">
                         <label for="organ" class="form-label fw-bold"><i class="fa-solid fa-building-user"></i> Órgão</label>
-                        <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ"
+                        <input type="text" class="form-control" disabled autocomplete="off" id="organ" name="organ" onblur="montaPrisma()"
                             required>
                     </div>
                     <div class="col-3">
@@ -93,6 +93,7 @@
             </div>
             <button class="btn btn-primary" type="button" onclick="montaPrisma()"><i class="fa-solid fa-eye"></i> Pré-visualizar Prisma</button>
             <button class="btn btn-success" type="button" onclick="generatePrisma()"><i class="fa-solid fa-file-pdf"></i> Exportar Prisma</button>
+            <button class="btn btn-warning" type="button" onclick="printPrisma()"><i class="fa-solid fa-print"></i> Imprimir Prisma</button>
         </form>
         <hr>
         <div id="a4Content" class="a4-page">
