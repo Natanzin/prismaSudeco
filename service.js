@@ -52,8 +52,9 @@ function montaPrisma() {
     const evento = document.querySelector('input[name="evento"]:checked').value;
     const fontPosition = document.querySelector('#fontePosition').value
     const fontOrgan = document.querySelector('#fontOrgan').value
+    const distanciaNome = Number(document.getElementById('distancia').value)
 
-    console.log(fontPosition)
+    console.log(distanciaNome)
 
     //elementos da página
     const page = document.getElementById('a4-page')
@@ -61,7 +62,6 @@ function montaPrisma() {
     const position1 = document.getElementById('position1');
     const name2 = document.getElementById('name2');
     const position2 = document.getElementById('position2');
-    //const spaceTop = document.getElementById('space-top');
     const spaceCenter = document.getElementById('space-center');
     const organ1 = document.getElementById('organ1');
     const organ2 = document.getElementById('organ2');
@@ -152,15 +152,22 @@ function montaPrisma() {
             organ2.style.fontSize = "30px";
     }
 
+    //muda o estado do input:range para enabled
+    const rangeCoaride = document.getElementById('distancia')
+    rangeCoaride.disabled = false
+
+    //limpa todos os campos
+    name1.innerText = ''
+    position1.innerText = ''
+    organ1.innerText = ''
+    name2.innerText = ''
+    position2.innerText = ''
+    organ2.innerText = ''
+    name1.style.fontSize = '70px'
+    name2.style.fontSize = '70px'
+
     //monta o prisma
     if (type === 'big') {
-        //limpa todos os campos
-        name1.innerText = ''
-        position1.innerText = ''
-        organ1.innerText = ''
-        name2.innerText = ''
-        position2.innerText = ''
-        organ2.innerText = ''
 
         // Prisma grande → texto na vertical, espelhado na horizontal
         name1.innerText = name
@@ -169,19 +176,26 @@ function montaPrisma() {
         position1.style.transform = 'rotate(180deg)'
         position2.innerText = position
         name2.innerText = name
-        spaceCenter.style.height = '330px'
+        spaceCenter.style.height = 330 + distanciaNome + 'px'
         position1.style.margin = '0 60px'
         position2.style.margin = '0 60px'
 
+        //prisma do condel - somente tamanho grande
         if (evento == 'condel') {
-            spaceCenter.style.height = '300px'
+            //desabilita o input:range
+            rangeCoaride.disabled = true
+            rangeCoaride.value = 0
+            rangeOutput.textContent = 0
+            //configurações do prisma do condel
+            spaceCenter.style.height = '310px'
             position1.style.margin = '0 80px'
             position2.style.margin = '0 80px'
+            //se o campo orgão for preenchido
             if (organ != '') {
                 organ1.innerText = organ
                 organ1.style.transform = 'rotate(180deg)'
                 organ2.innerText = organ
-                spaceCenter.style.height = '280px'
+                spaceCenter.style.height = '270px'
             }
         }
     } else {
@@ -192,17 +206,26 @@ function montaPrisma() {
         position1.style.transform = 'rotate(180deg)'
         position2.innerText = position
         name2.innerText = name
-        spaceCenter.style.height = '340px'
+        spaceCenter.style.height = 340 + distanciaNome + 'px'
         position1.style.margin = '0 55px'
         position2.style.margin = '0 55px'
+        name1.style.fontSize = '55px'
+        name2.style.fontSize = '55px'
 
+        //se o evento for coaride - somente prisma pequeno
         if (evento == 'coaride') {
+            //desabilita o input:range
+            rangeCoaride.disabled = true
+            rangeCoaride.value = 0
+            rangeOutput.textContent = 0
+            //configurações do coaride
             organ1.innerText = organ
             organ1.style.transform = 'rotate(180deg)'
             organ2.innerText = organ
             spaceCenter.style.height = '210px'
             position1.style.margin = '0 75px'
             position2.style.margin = '0 75px'
+            //se o campo orgão for preenchido
             if (organ == '') {
                 spaceCenter.style.height = '270px'
             }
