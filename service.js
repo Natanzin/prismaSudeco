@@ -15,10 +15,10 @@ function trocaImagem() {
         if (type === "small") {
             img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
             img.style.width = '210mm'
-            img.style.height = '296mm'
+            img.style.height = '297mm'
         } else {
             img.style.backgroundImage = "url('./assets/papel/big.png')"; // Fundo prisma grande
-            img.style.width = '296mm'
+            img.style.width = '297mm'
             img.style.height = '210mm'
         }
     } else if (evento == 'condel') {
@@ -264,8 +264,8 @@ function generatePrisma() {
     const opt = {
         margin: 0,
         filename: nameFile,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        image: { type: 'png', quality: 0.98 },
+        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
     };
     html2pdf().set(opt).from(element).save();
@@ -286,8 +286,8 @@ function printPrisma() {
     const opt = {
         margin: 0,
         filename: 'document.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        image: { type: 'png', quality: 0.98 },
+        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
     };
     html2pdf().set(opt).from(element).outputPdf('bloburl').then((pdfUrl) => {
