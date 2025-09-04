@@ -17,7 +17,7 @@ function trocaImagem() {
             img.style.width = '210mm'
             img.style.height = '296mm'
         } else {
-            img.style.backgroundImage = "url('./assets/papel/big.jpeg')"; // Fundo prisma grande
+            img.style.backgroundImage = "url('./assets/papel/big.png')"; // Fundo prisma grande
             img.style.width = '296mm'
             img.style.height = '210mm'
         }
