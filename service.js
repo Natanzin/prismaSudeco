@@ -24,12 +24,16 @@ function trocaImagem() {
     } else if (evento == 'condel') {
         document.getElementById('organ').disabled = false
         document.getElementById('fontOrgan').disabled = false
-        img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
-        img.style.width = '296mm'
-        img.style.height = '210mm'
-        typeBig.checked = true
-        txtPequeno.style.textDecoration = 'line-through'
         txtGrande.style.textDecoration = 'none'
+        if (type == 'small'){
+            img.style.backgroundImage = "url('./assets/papel/small-condel.png')"; // Fundo prisma grande
+            img.style.width = '210mm'
+            img.style.height = '296mm'
+        } else {
+            img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
+            img.style.width = '296mm'
+            img.style.height = '210mm'
+        }
     } else if (evento == 'coaride') {
         document.getElementById('organ').disabled = false
         document.getElementById('fontOrgan').disabled = false
@@ -229,6 +233,22 @@ function montaPrisma() {
             if (organ == '') {
                 spaceCenter.style.height = '270px'
             }
+        } else if (evento == 'condel'){
+             //desabilita o input:range
+            rangeCoaride.disabled = true
+            rangeCoaride.value = 0
+            rangeOutput.textContent = 0
+            //configurações do coaride
+            organ1.innerText = organ
+            organ1.style.transform = 'rotate(180deg)'
+            organ2.innerText = organ
+            spaceCenter.style.height = '240px'
+            position1.style.margin = '0 75px'
+            position2.style.margin = '0 75px'
+            //se o campo orgão for preenchido
+            if (organ == '') {
+                spaceCenter.style.height = '280px'
+            }
         }
     }
 }
@@ -257,6 +277,9 @@ function generatePrisma() {
         }
         else if (evento == 'coaride') {
             nameFile = 'prisma pequeno coaride - ' + name + '.pdf'
+        }
+        else if (evento == 'condel') {
+            nameFile = 'Prisma pequeno condel - ' + name + '.pdf'
         }
     }
 
