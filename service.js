@@ -25,7 +25,7 @@ function trocaImagem() {
         document.getElementById('organ').disabled = false
         document.getElementById('fontOrgan').disabled = false
         txtGrande.style.textDecoration = 'none'
-        if (type == 'small'){
+        if (type == 'small') {
             img.style.backgroundImage = "url('./assets/papel/small-condel.png')"; // Fundo prisma grande
             img.style.width = '210mm'
             img.style.height = '296mm'
@@ -233,8 +233,8 @@ function montaPrisma() {
             if (organ == '') {
                 spaceCenter.style.height = '270px'
             }
-        } else if (evento == 'condel'){
-             //desabilita o input:range
+        } else if (evento == 'condel') {
+            //desabilita o input:range
             rangeCoaride.disabled = true
             rangeCoaride.value = 0
             rangeOutput.textContent = 0
@@ -287,9 +287,10 @@ function generatePrisma() {
     const opt = {
         margin: 0,
         filename: nameFile,
-        image: { type: 'png', quality: 0.98 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
+        image: { type: 'png', quality: 1.0 },
+        html2canvas: { scale: 3, scrollX: 0, scrollY: 0, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation },
+        pageBrake: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save();
 }
@@ -309,9 +310,10 @@ function printPrisma() {
     const opt = {
         margin: 0,
         filename: 'document.pdf',
-        image: { type: 'png', quality: 0.98 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
+        image: { type: 'png', quality: 1.0 },
+        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation },
+        pageBrake: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).outputPdf('bloburl').then((pdfUrl) => {
         const win = window.open(pdfUrl)
