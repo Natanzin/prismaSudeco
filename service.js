@@ -169,16 +169,23 @@ function montaPrisma() {
     //monta o prisma
     if (type === 'big') {
 
-        // Prisma grande
-        name1.innerText = name
-        position1.innerText = position
-        name1.style.transform = 'rotate(180deg)'
-        position1.style.transform = 'rotate(180deg)'
-        position2.innerText = position
-        name2.innerText = name
-        spaceCenter.style.height = 330 + distanciaNome + 'px'
-        position1.style.margin = '0 60px'
-        position2.style.margin = '0 60px'
+        if (evento == 'sudeco') {
+            name1.innerText = name
+            position1.innerText = position
+            name1.style.transform = 'rotate(180deg)'
+            position1.style.transform = 'rotate(180deg)'
+            position2.innerText = position
+            name2.innerText = name
+            spaceCenter.style.height = 330 + distanciaNome + 'px'
+            position1.style.margin = '0 60px'
+            position2.style.margin = '0 60px'
+            if (organ != '') {
+                organ1.innerText = organ
+                organ1.style.transform = 'rotate(180deg)'
+                organ2.innerText = organ
+                spaceCenter.style.height = 300 + distanciaNome + 'px'
+            }
+        }
 
         //prisma do condel - somente tamanho grande
         if (evento == 'condel') {
