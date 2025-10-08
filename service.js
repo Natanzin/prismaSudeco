@@ -183,7 +183,7 @@ function montaPrisma() {
                 organ1.innerText = organ
                 organ1.style.transform = 'rotate(180deg)'
                 organ2.innerText = organ
-                spaceCenter.style.height = 300 + distanciaNome + 'px'
+                spaceCenter.style.height = 330 + distanciaNome + 'px'
             }
         }
 
