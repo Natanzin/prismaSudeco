@@ -7,9 +7,7 @@ function trocaImagem() {
     const txtPequeno = document.getElementById('prismaPequeno')
     const txtGrande = document.getElementById('prismaGrande')
     if (evento == 'sudeco') {
-        document.getElementById('organ').disabled = true
-        document.getElementById('organ').value = ""
-        document.getElementById('fontOrgan').disabled = true
+
         txtPequeno.style.textDecoration = 'none'
         txtGrande.style.textDecoration = 'none'
         if (type === "small") {
@@ -22,8 +20,6 @@ function trocaImagem() {
             img.style.height = '210mm'
         }
     } else if (evento == 'condel') {
-        document.getElementById('organ').disabled = false
-        document.getElementById('fontOrgan').disabled = false
         txtGrande.style.textDecoration = 'none'
         if (type == 'small') {
             img.style.backgroundImage = "url('./assets/papel/small-condel.png')"; // Fundo prisma grande
@@ -35,8 +31,8 @@ function trocaImagem() {
             img.style.height = '210mm'
         }
     } else if (evento == 'coaride') {
-        document.getElementById('organ').disabled = false
-        document.getElementById('fontOrgan').disabled = false
+        //document.getElementById('organ').disabled = false
+        //document.getElementById('fontOrgan').disabled = false
         img.style.backgroundImage = "url('./assets/papel/coaride.png')"; // Fundo prisma pequeno
         img.style.width = '210mm'
         img.style.height = '296mm'
@@ -173,7 +169,7 @@ function montaPrisma() {
     //monta o prisma
     if (type === 'big') {
 
-        // Prisma grande → texto na vertical, espelhado na horizontal
+        // Prisma grande
         name1.innerText = name
         position1.innerText = position
         name1.style.transform = 'rotate(180deg)'
@@ -203,21 +199,26 @@ function montaPrisma() {
             }
         }
     } else {
-        // Prisma pequeno → texto na horizontal, espelhado na vertical
-        name1.innerText = name
-        position1.innerText = position
-        name1.style.transform = 'rotate(180deg)'
-        position1.style.transform = 'rotate(180deg)'
-        position2.innerText = position
-        name2.innerText = name
-        spaceCenter.style.height = 340 + distanciaNome + 'px'
-        position1.style.margin = '0 55px'
-        position2.style.margin = '0 55px'
-        name1.style.fontSize = '55px'
-        name2.style.fontSize = '55px'
-
-        //se o evento for coaride - somente prisma pequeno
-        if (evento == 'coaride') {
+        // Prisma pequeno
+        if (evento == 'sudeco') {
+            name1.innerText = name
+            position1.innerText = position
+            name1.style.transform = 'rotate(180deg)'
+            position1.style.transform = 'rotate(180deg)'
+            position2.innerText = position
+            name2.innerText = name
+            spaceCenter.style.height = 340 + distanciaNome + 'px'
+            position1.style.margin = '0 55px'
+            position2.style.margin = '0 55px'
+            name1.style.fontSize = '55px'
+            name2.style.fontSize = '55px'
+            if (organ != '') {
+                organ1.innerText = organ
+                organ1.style.transform = 'rotate(180deg)'
+                organ2.innerText = organ
+                spaceCenter.style.height = 310 + distanciaNome + 'px'
+            }
+        } else if (evento == 'coaride') {
             //desabilita o input:range
             rangeCoaride.disabled = true
             rangeCoaride.value = 0
@@ -288,9 +289,8 @@ function generatePrisma() {
         margin: 0,
         filename: nameFile,
         image: { type: 'png', quality: 1.0 },
-        html2canvas: { scale: 3, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation },
-        pageBrake: { mode: ['css', 'legacy'] }
+        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
     };
     html2pdf().set(opt).from(element).save();
 }
@@ -312,8 +312,7 @@ function printPrisma() {
         filename: 'document.pdf',
         image: { type: 'png', quality: 1.0 },
         html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation },
-        pageBrake: { mode: ['css', 'legacy'] }
+        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
     };
     html2pdf().set(opt).from(element).outputPdf('bloburl').then((pdfUrl) => {
         const win = window.open(pdfUrl)
