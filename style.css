@@ -46,6 +46,7 @@ footer {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    border: 1px solid blue;
 }
 
 .a4-page p {
@@ -60,7 +61,6 @@ footer {
     font-weight: bold;
     margin: 3px 0;
     padding: 0;
-    text-transform: capitalize;
     line-height: 100%;
 }
 

@@ -2,327 +2,151 @@ function trocaImagem() {
     const img = document.querySelector(".a4-page");
     const evento = document.querySelector('input[name="evento"]:checked').value;
     const type = document.querySelector('input[name="type"]:checked').value;
-    const typeBig = document.getElementById('big')
-    const typeSmall = document.getElementById('small')
-    const txtPequeno = document.getElementById('prismaPequeno')
-    const txtGrande = document.getElementById('prismaGrande')
-    if (evento == 'sudeco') {
+    const typeSmall = document.getElementById('small');
+    const txtPequeno = document.getElementById('prismaPequeno');
+    const txtGrande = document.getElementById('prismaGrande');
 
-        txtPequeno.style.textDecoration = 'none'
-        txtGrande.style.textDecoration = 'none'
-        if (type === "small") {
-            img.style.backgroundImage = "url('./assets/papel/small.png')"; // Fundo prisma pequeno
-            img.style.width = '210mm'
-            img.style.height = '297mm'
-        } else {
-            img.style.backgroundImage = "url('./assets/papel/big.png')"; // Fundo prisma grande
-            img.style.width = '297mm'
-            img.style.height = '210mm'
+    const fundos = {
+        sudeco: {
+            small: "./assets/papel/small.png",
+            big: "./assets/papel/big.png"
+        },
+        condel: {
+            small: "./assets/papel/small-condel.png",
+            big: "./assets/papel/condel.png"
+        },
+        coaride: {
+            small: "./assets/papel/coaride.png"
         }
-    } else if (evento == 'condel') {
-        txtGrande.style.textDecoration = 'none'
-        if (type == 'small') {
-            img.style.backgroundImage = "url('./assets/papel/small-condel.png')"; // Fundo prisma grande
-            img.style.width = '210mm'
-            img.style.height = '296mm'
-        } else {
-            img.style.backgroundImage = "url('./assets/papel/condel.png')"; // Fundo prisma grande
-            img.style.width = '296mm'
-            img.style.height = '210mm'
-        }
-    } else if (evento == 'coaride') {
-        //document.getElementById('organ').disabled = false
-        //document.getElementById('fontOrgan').disabled = false
-        img.style.backgroundImage = "url('./assets/papel/coaride.png')"; // Fundo prisma pequeno
-        img.style.width = '210mm'
-        img.style.height = '296mm'
-        typeSmall.checked = true
-        txtGrande.style.textDecoration = 'line-through'
-        txtPequeno.style.textDecoration = 'none'
+    };
+
+    // limpa riscos dos textos
+    txtPequeno.style.textDecoration = 'none';
+    txtGrande.style.textDecoration = 'none';
+
+    if (evento === 'coaride') {
+        typeSmall.checked = true;
+        txtGrande.style.textDecoration = 'line-through';
     }
-    montaPrisma()
+
+    // define imagem de fundo e tamanho da página
+    const fundo = fundos[evento][type] || fundos[evento].small;
+    img.style.backgroundImage = `url('${fundo}')`;
+    img.style.width = type === "big" ? "297mm" : "210mm";
+    img.style.height = type === "big" ? "210mm" : "297mm";
+
+    montaPrisma();
 }
 
 function montaPrisma() {
-    //formulário
+    // pega valores do formulário
     const name = document.getElementById('name').value;
     const organ = document.getElementById('organ').value;
     const position = document.getElementById('position').value;
     const type = document.querySelector('input[name="type"]:checked').value;
     const evento = document.querySelector('input[name="evento"]:checked').value;
-    const fontPosition = document.querySelector('#fontePosition').value
-    const fontOrgan = document.querySelector('#fontOrgan').value
-    const distanciaNome = Number(document.getElementById('distancia').value)
+    const distanciaNome = Number(document.getElementById('distancia').value);
 
-    console.log(distanciaNome)
-
-    //elementos da página
-    const page = document.getElementById('a4-page')
-    const name1 = document.getElementById('name1');
-    const position1 = document.getElementById('position1');
-    const name2 = document.getElementById('name2');
-    const position2 = document.getElementById('position2');
+    // elementos
+    const page = document.getElementById('a4Content');
     const spaceCenter = document.getElementById('space-center');
-    const organ1 = document.getElementById('organ1');
-    const organ2 = document.getElementById('organ2');
+    const [name1, name2] = [document.getElementById('name1'), document.getElementById('name2')];
+    const [position1, position2] = [document.getElementById('position1'), document.getElementById('position2')];
+    const [organ1, organ2] = [document.getElementById('organ1'), document.getElementById('organ2')];
 
-    switch (fontPosition) {
-        case "5":
-            position1.style.fontSize = "5px";
-            position2.style.fontSize = "5px";
-            break;
-        case "10":
-            position1.style.fontSize = "10px";
-            position2.style.fontSize = "10px";
-            break;
-        case "15":
-            position1.style.fontSize = "15px";
-            position2.style.fontSize = "15px";
-            break;
-        case "20":
-            position1.style.fontSize = "20px";
-            position2.style.fontSize = "20px";
-            break;
-        case "25":
-            position1.style.fontSize = "25px";
-            position2.style.fontSize = "25px";
-            break;
-        case "30":
-            position1.style.fontSize = "30px";
-            position2.style.fontSize = "30px";
-            break;
-        case "35":
-            position1.style.fontSize = "35px";
-            position2.style.fontSize = "35px";
-            break;
-        case "40":
-            position1.style.fontSize = "40px";
-            position2.style.fontSize = "40px";
-            break;
-        case "45":
-            position1.style.fontSize = "45px";
-            position2.style.fontSize = "45px";
-            break;
-        default:
-            // fallback (se der algum valor inesperado → aplica 40px)
-            position1.style.fontSize = "40px";
-            position2.style.fontSize = "40px";
+    // tamanhos de fonte
+    const fontPosition = document.querySelector('#fontPosition').value;
+    const fontOrgan = document.querySelector('#fontOrgan').value;
+    const fontName = document.querySelector('#fontName').value;
+
+    function aplicarFontSize(valor, elementos, fallback) {
+        const tamanho = parseInt(valor) || fallback;
+        elementos.forEach(el => el.style.fontSize = `${tamanho}px`);
     }
 
-    switch (fontOrgan) {
-        case "5":
-            organ1.style.fontSize = "5px";
-            organ2.style.fontSize = "5px";
-            break;
-        case "10":
-            organ1.style.fontSize = "10px";
-            organ2.style.fontSize = "10px";
-            break;
-        case "15":
-            organ1.style.fontSize = "15px";
-            organ2.style.fontSize = "15px";
-            break;
-        case "20":
-            organ1.style.fontSize = "20px";
-            organ2.style.fontSize = "20px";
-            break;
-        case "25":
-            organ1.style.fontSize = "25px";
-            organ2.style.fontSize = "25px";
-            break;
-        case "30":
-            organ1.style.fontSize = "30px";
-            organ2.style.fontSize = "30px";
-            break;
-        case "35":
-            organ1.style.fontSize = "35px";
-            organ2.style.fontSize = "35px";
-            break;
-        case "40":
-            organ1.style.fontSize = "40px";
-            organ2.style.fontSize = "40px";
-            break;
-        case "45":
-            organ1.style.fontSize = "45px";
-            organ2.style.fontSize = "45px";
-            break;
-        default:
-            // fallback (se der algum valor inesperado → aplica 40px)
-            organ1.style.fontSize = "30px";
-            organ2.style.fontSize = "30px";
-    }
+    // define tamanho inicial do nome conforme o type
+    const fontNameSelect = document.querySelector('#fontName');
+    let tamanhoInicialNome;
 
-    //muda o estado do input:range para enabled
-    const rangeCoaride = document.getElementById('distancia')
-    rangeCoaride.disabled = false
-
-    //limpa todos os campos
-    name1.innerText = ''
-    position1.innerText = ''
-    organ1.innerText = ''
-    name2.innerText = ''
-    position2.innerText = ''
-    organ2.innerText = ''
-    name1.style.fontSize = '70px'
-    name2.style.fontSize = '70px'
-
-    //monta o prisma
-    if (type === 'big') {
-
-        if (evento == 'sudeco') {
-            name1.innerText = name
-            position1.innerText = position
-            name1.style.transform = 'rotate(180deg)'
-            position1.style.transform = 'rotate(180deg)'
-            position2.innerText = position
-            name2.innerText = name
-            spaceCenter.style.height = 330 + distanciaNome + 'px'
-            position1.style.margin = '0 60px'
-            position2.style.margin = '0 60px'
-            if (organ != '') {
-                organ1.innerText = organ
-                organ1.style.transform = 'rotate(180deg)'
-                organ2.innerText = organ
-                spaceCenter.style.height = 330 + distanciaNome + 'px'
-            }
-        }
-
-        //prisma do condel - somente tamanho grande
-        if (evento == 'condel') {
-            //desabilita o input:range
-            rangeCoaride.disabled = true
-            rangeCoaride.value = 0
-            rangeOutput.textContent = 0
-            //configurações do prisma do condel
-            spaceCenter.style.height = '310px'
-            position1.style.margin = '0 80px'
-            position2.style.margin = '0 80px'
-            //se o campo orgão for preenchido
-            if (organ != '') {
-                organ1.innerText = organ
-                organ1.style.transform = 'rotate(180deg)'
-                organ2.innerText = organ
-                spaceCenter.style.height = '270px'
-            }
-        }
+    if (type === "big") {
+        tamanhoInicialNome = 70;
+        fontNameSelect.value = "70"; // seleciona automaticamente o valor 70
     } else {
-        // Prisma pequeno
-        if (evento == 'sudeco') {
-            name1.innerText = name
-            position1.innerText = position
-            name1.style.transform = 'rotate(180deg)'
-            position1.style.transform = 'rotate(180deg)'
-            position2.innerText = position
-            name2.innerText = name
-            spaceCenter.style.height = 340 + distanciaNome + 'px'
-            position1.style.margin = '0 55px'
-            position2.style.margin = '0 55px'
-            name1.style.fontSize = '55px'
-            name2.style.fontSize = '55px'
-            if (organ != '') {
-                organ1.innerText = organ
-                organ1.style.transform = 'rotate(180deg)'
-                organ2.innerText = organ
-                spaceCenter.style.height = 310 + distanciaNome + 'px'
-            }
-        } else if (evento == 'coaride') {
-            //desabilita o input:range
-            rangeCoaride.disabled = true
-            rangeCoaride.value = 0
-            rangeOutput.textContent = 0
-            //configurações do coaride
-            organ1.innerText = organ
-            organ1.style.transform = 'rotate(180deg)'
-            organ2.innerText = organ
-            spaceCenter.style.height = '210px'
-            position1.style.margin = '0 75px'
-            position2.style.margin = '0 75px'
-            //se o campo orgão for preenchido
-            if (organ == '') {
-                spaceCenter.style.height = '270px'
-            }
-        } else if (evento == 'condel') {
-            //desabilita o input:range
-            rangeCoaride.disabled = true
-            rangeCoaride.value = 0
-            rangeOutput.textContent = 0
-            //configurações do coaride
-            organ1.innerText = organ
-            organ1.style.transform = 'rotate(180deg)'
-            organ2.innerText = organ
-            spaceCenter.style.height = '240px'
-            position1.style.margin = '0 75px'
-            position2.style.margin = '0 75px'
-            //se o campo orgão for preenchido
-            if (organ == '') {
-                spaceCenter.style.height = '280px'
-            }
-        }
+        tamanhoInicialNome = 50;
+        fontNameSelect.value = "50"; // seleciona automaticamente o valor 50
     }
+
+    aplicarFontSize(fontPosition, [position1, position2], 40);
+    aplicarFontSize(fontName, [name1, name2], tamanhoInicialNome);
+    aplicarFontSize(fontOrgan, [organ1, organ2], 30);
+
+    document.getElementById('distancia').disabled = false;
+
+    // limpa campos
+    [name1, position1, organ1, name2, position2, organ2].forEach(el => el.innerText = '');
+
+    // monta textos (espelhados)
+    [name1, position1, organ1].forEach(el => el.style.transform = 'rotate(180deg)');
+    name1.innerText = name;
+    position1.innerText = position;
+    organ1.innerText = organ;
+    name2.innerText = name;
+    position2.innerText = position;
+    organ2.innerText = organ;
+
+    // ajusta altura do espaço central
+    const alturas = {
+        big: { sudeco: 340, condel: 230 },
+        small: { sudeco: 300, coaride: 190, condel: 200 }
+    };
+    const alturaBase = alturas[type]?.[evento] || 300;
+    spaceCenter.style.height = (alturaBase + distanciaNome) + 'px';
+
+    if (type === 'small') page.style.paddingInline = '70px';
 }
 
 function generatePrisma() {
-    montaPrisma()
-
+    montaPrisma();
     const type = document.querySelector('input[name="type"]:checked').value;
     const name = document.getElementById('name').value;
     const evento = document.querySelector('input[name="evento"]:checked').value;
 
-    let orientation
-    let nameFile
+    const orientation = type === 'big' ? 'landscape' : 'portrait';
+    const nomes = {
+        big: {
+            condel: `prisma grande condel - ${name}.pdf`,
+            sudeco: `prisma grande sudeco - ${name}.pdf`
+        },
+        small: {
+            sudeco: `prisma pequeno sudeco - ${name}.pdf`,
+            coaride: `prisma pequeno coaride - ${name}.pdf`,
+            condel: `prisma pequeno condel - ${name}.pdf`
+        }
+    };
 
-    if (type == 'big') {
-        orientation = 'landscape'
-        if (evento == 'condel') {
-            nameFile = 'prisma grande condel - ' + name + '.pdf'
-        } else if (evento == 'sudeco') {
-            nameFile = 'prisma grande sudeco - ' + name + '.pdf'
-        }
-    } else {
-        orientation = 'portrait'
-        if (evento == 'sudeco') {
-            nameFile = 'prisma pequeno sudeco - ' + name + '.pdf'
-        }
-        else if (evento == 'coaride') {
-            nameFile = 'prisma pequeno coaride - ' + name + '.pdf'
-        }
-        else if (evento == 'condel') {
-            nameFile = 'Prisma pequeno condel - ' + name + '.pdf'
-        }
-    }
+    const nameFile = nomes[type][evento] || `prisma - ${name}.pdf`;
 
-    const element = document.getElementById('a4Content');
-    const opt = {
+    html2pdf().set({
         margin: 0,
         filename: nameFile,
         image: { type: 'png', quality: 1.0 },
         html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
-    };
-    html2pdf().set(opt).from(element).save();
+        jsPDF: { unit: 'mm', format: 'a4', orientation }
+    }).from(document.getElementById('a4Content')).save();
 }
 
-//imprimir prisma
 function printPrisma() {
     const type = document.querySelector('input[name="type"]:checked').value;
-    const element = document.getElementById('a4Content');
-    let orientation
+    const orientation = type === 'big' ? 'landscape' : 'portrait';
 
-    if (type == 'big') {
-        orientation = 'landscape'
-    } else {
-        orientation = 'portrait'
-
-    }
-    const opt = {
+    html2pdf().set({
         margin: 0,
         filename: 'document.pdf',
         image: { type: 'png', quality: 1.0 },
         html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: orientation }
-    };
-    html2pdf().set(opt).from(element).outputPdf('bloburl').then((pdfUrl) => {
-        const win = window.open(pdfUrl)
-        win.print()
-    });
+        jsPDF: { unit: 'mm', format: 'a4', orientation }
+    })
+        .from(document.getElementById('a4Content'))
+        .outputPdf('bloburl')
+        .then(pdfUrl => window.open(pdfUrl).print());
 }

@@ -37,15 +37,30 @@
             </div>
             <div class="mb-3">
                 <div class="row">
-                    <div class="col-9">
+                    <div class="col-6">
                         <label for="name" class="form-label fw-bold"><i class="fa-solid fa-user-tie"></i> Nome</label>
                         <input type="text" class="form-control" autocomplete="off" id="name" name="name"
                             oninput="montaPrisma()" required>
                     </div>
                     <div class="col-3">
+                        <label for="fontName" class="form-label fw-bold"><i class="fa-solid fa-text-height"></i>
+                            Tamanho da Fonte</label>
+                        <select class="form-select" name="fontName" id="fontName" onchange="montaPrisma()">
+                            <option value="30">30</option>
+                            <option value="35">35</option>
+                            <option value="40">40</option>
+                            <option value="45">45</option>
+                            <option value="50" selected>50</option>
+                            <option value="55">55</option>
+                            <option value="60">60</option>
+                            <option value="65">65</option>
+                            <option value="70">70</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
                         <label class="form-label fw-bold" for="distancia">Distância: <output for="distancia"
                                 id="rangeValue" aria-hidden="true"></output></label><br>
-                        <input class="form-range" type="range" min="0" max="150" value="0" id="distancia" oninput="montaPrisma()">
+                        <input class="form-range" type="range" min="0" max="450" value="0" id="distancia" oninput="montaPrisma()">
                     </div>
                 </div>
             </div>
@@ -60,7 +75,7 @@
                     <div class="col-3">
                         <label for="fontPosition" class="form-label fw-bold"><i class="fa-solid fa-text-height"></i>
                             Tamanho da Fonte</label>
-                        <select class="form-select" name="fontePosition" id="fontePosition" onchange="montaPrisma()">
+                        <select class="form-select" name="fontPosition" id="fontPosition" onchange="montaPrisma()">
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="15">15</option>
