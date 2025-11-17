@@ -16,7 +16,6 @@ header {
     padding: 15px 20px;
     font-size: 18px;
     z-index: 1000;
-    /* fica por cima do conteúdo */
     display: flex;
     justify-content: space-around;
 }
@@ -33,22 +32,23 @@ footer {
     font-size: 10px;
 }
 
+/* 🔥 Ajuste principal: mantém proporção perfeita do A4 e nunca corta */
 .a4-page {
     width: 210mm;
     height: 296mm;
-    /*position: relative;*/
-    background-size: cover;
+    background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;   /* <- evita corte e mantém proporção */
     page-break-inside: avoid;
-    margin: 0;
-    background-image: url('./assets/papel/small.png');
+    margin: 0 auto;
+
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    border: 1px solid blue;
 }
 
+/* Textos */
 .a4-page p {
     text-align: center;
     margin: 0;
@@ -74,7 +74,6 @@ footer {
 #organ1,
 #organ2 {
     font-size: 30px;
-    margin: 0;
     padding: 0;
     margin: 5px 0;
 }

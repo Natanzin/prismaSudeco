@@ -1,11 +1,35 @@
 function trocaImagem() {
     const img = document.querySelector(".a4-page");
     const evento = document.querySelector('input[name="evento"]:checked').value;
-    const type = document.querySelector('input[name="type"]:checked').value;
+
     const typeSmall = document.getElementById('small');
+    const typeBig = document.getElementById('big');
     const txtPequeno = document.getElementById('prismaPequeno');
     const txtGrande = document.getElementById('prismaGrande');
 
+    // limpa riscos
+    txtPequeno.style.textDecoration = 'none';
+    txtGrande.style.textDecoration = 'none';
+
+    // regras de tipos permitidos por evento
+    const restricoes = {
+        coaride: "small",
+        criff: "big"
+    };
+
+    // aplica automaticamente as restrições
+    if (restricoes[evento] === "small") {
+        typeSmall.checked = true;
+        txtGrande.style.textDecoration = "line-through";
+    } else if (restricoes[evento] === "big") {
+        typeBig.checked = true;
+        txtPequeno.style.textDecoration = "line-through";
+    }
+
+    // agora SIM podemos ler o type correto
+    const type = document.querySelector('input[name="type"]:checked').value;
+
+    // banco de fundos
     const fundos = {
         sudeco: {
             small: "./assets/papel/small.png",
@@ -17,21 +41,22 @@ function trocaImagem() {
         },
         coaride: {
             small: "./assets/papel/coaride.png"
+        },
+        criff: {
+            big: "./assets/papel/criff.png"
         }
     };
 
-    // limpa riscos dos textos
-    txtPequeno.style.textDecoration = 'none';
-    txtGrande.style.textDecoration = 'none';
+    // fallback seguro que nunca dá erro
+    const fundo =
+        fundos[evento][type] ||
+        fundos[evento].big ||
+        fundos[evento].small;
 
-    if (evento === 'coaride') {
-        typeSmall.checked = true;
-        txtGrande.style.textDecoration = 'line-through';
-    }
-
-    // define imagem de fundo e tamanho da página
-    const fundo = fundos[evento][type] || fundos[evento].small;
+    // aplica imagem
     img.style.backgroundImage = `url('${fundo}')`;
+
+    // ajusta tamanho da "folha"
     img.style.width = type === "big" ? "297mm" : "210mm";
     img.style.height = type === "big" ? "210mm" : "297mm";
 
@@ -39,7 +64,6 @@ function trocaImagem() {
 }
 
 function montaPrisma() {
-    // pega valores do formulário
     const name = document.getElementById('name').value;
     const organ = document.getElementById('organ').value;
     const position = document.getElementById('position').value;
@@ -47,14 +71,13 @@ function montaPrisma() {
     const evento = document.querySelector('input[name="evento"]:checked').value;
     const distanciaNome = Number(document.getElementById('distancia').value);
 
-    // elementos
     const page = document.getElementById('a4Content');
     const spaceCenter = document.getElementById('space-center');
+
     const [name1, name2] = [document.getElementById('name1'), document.getElementById('name2')];
     const [position1, position2] = [document.getElementById('position1'), document.getElementById('position2')];
     const [organ1, organ2] = [document.getElementById('organ1'), document.getElementById('organ2')];
 
-    // tamanhos de fonte
     const fontPosition = document.querySelector('#fontPosition').value;
     const fontOrgan = document.querySelector('#fontOrgan').value;
     const fontName = document.querySelector('#fontName').value;
@@ -64,17 +87,10 @@ function montaPrisma() {
         elementos.forEach(el => el.style.fontSize = `${tamanho}px`);
     }
 
-    // define tamanho inicial do nome conforme o type
+    // define tamanho inicial do nome
     const fontNameSelect = document.querySelector('#fontName');
-    let tamanhoInicialNome;
-
-    if (type === "big") {
-        tamanhoInicialNome = 70;
-        fontNameSelect.value = "70"; // seleciona automaticamente o valor 70
-    } else {
-        tamanhoInicialNome = 50;
-        fontNameSelect.value = "50"; // seleciona automaticamente o valor 50
-    }
+    let tamanhoInicialNome = type === "big" ? 70 : 50;
+    fontNameSelect.value = String(tamanhoInicialNome);
 
     aplicarFontSize(fontPosition, [position1, position2], 40);
     aplicarFontSize(fontName, [name1, name2], tamanhoInicialNome);
@@ -82,27 +98,31 @@ function montaPrisma() {
 
     document.getElementById('distancia').disabled = false;
 
-    // limpa campos
+    // limpa textos
     [name1, position1, organ1, name2, position2, organ2].forEach(el => el.innerText = '');
 
-    // monta textos (espelhados)
+    // textos (espelhado)
     [name1, position1, organ1].forEach(el => el.style.transform = 'rotate(180deg)');
+
     name1.innerText = name;
     position1.innerText = position;
     organ1.innerText = organ;
+
     name2.innerText = name;
     position2.innerText = position;
     organ2.innerText = organ;
 
-    // ajusta altura do espaço central
+    // define altura do espaço central
     const alturas = {
-        big: { sudeco: 340, condel: 230 },
+        big: { sudeco: 340, condel: 230, criff: 230 },
         small: { sudeco: 300, coaride: 190, condel: 200 }
     };
-    const alturaBase = alturas[type]?.[evento] || 300;
+
+    const alturaBase = (alturas[type]?.[evento]) ?? 300;
     spaceCenter.style.height = (alturaBase + distanciaNome) + 'px';
 
-    if (type === 'small') page.style.paddingInline = '70px';
+    if (type === 'small')
+        page.style.paddingInline = '70px';
 }
 
 function generatePrisma() {
@@ -112,10 +132,12 @@ function generatePrisma() {
     const evento = document.querySelector('input[name="evento"]:checked').value;
 
     const orientation = type === 'big' ? 'landscape' : 'portrait';
+
     const nomes = {
         big: {
             condel: `prisma grande condel - ${name}.pdf`,
-            sudeco: `prisma grande sudeco - ${name}.pdf`
+            sudeco: `prisma grande sudeco - ${name}.pdf`,
+            criff: `prisma grande criff - ${name}.pdf`
         },
         small: {
             sudeco: `prisma pequeno sudeco - ${name}.pdf`,
@@ -150,3 +172,4 @@ function printPrisma() {
         .outputPdf('bloburl')
         .then(pdfUrl => window.open(pdfUrl).print());
 }
+document.addEventListener("load", trocaImagem());
