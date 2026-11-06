@@ -2,151 +2,82 @@ function trocaImagem() {
     const img = document.querySelector(".a4-page");
     const evento = document.querySelector('input[name="evento"]:checked').value;
 
-    const typeSmall = document.getElementById('small');
-    const typeBig = document.getElementById('big');
-    const txtPequeno = document.getElementById('prismaPequeno');
-    const txtGrande = document.getElementById('prismaGrande');
-
-    // limpa riscos
-    txtPequeno.style.textDecoration = 'none';
-    txtGrande.style.textDecoration = 'none';
-
-    // regras de tipos permitidos por evento
-    const restricoes = {
-        coaride: "small",
-        criff: "big"
-    };
-
-    // aplica automaticamente as restrições
-    if (restricoes[evento] === "small") {
-        typeSmall.checked = true;
-        txtGrande.style.textDecoration = "line-through";
-    } else if (restricoes[evento] === "big") {
-        typeBig.checked = true;
-        txtPequeno.style.textDecoration = "line-through";
-    }
-
-    // agora SIM podemos ler o type correto
-    const type = document.querySelector('input[name="type"]:checked').value;
-
     // banco de fundos
     const fundos = {
-        sudeco: {
-            small: "./assets/papel/small.png",
-            big: "./assets/papel/big.png"
-        },
-        condel: {
-            small: "./assets/papel/small-condel.png",
-            big: "./assets/papel/condel.png"
-        },
-        coaride: {
-            small: "./assets/papel/coaride.png"
-        },
-        criff: {
-            big: "./assets/papel/criff.png"
-        }
+        sudeco: "./assets/papel/sudeco.png",
+        condel: "./assets/papel/condel.png",
+        coaride: "./assets/papel/coaride.png",
+        criff: "./assets/papel/criff.png"
     };
 
-    // fallback seguro que nunca dá erro
-    const fundo =
-        fundos[evento][type] ||
-        fundos[evento].big ||
-        fundos[evento].small;
+    //esconde o campo Nome da Reunião caso for Sudeco
+    if (evento == 'sudeco') {
+        document.getElementById('divReuniao').style.display = "none"
+        document.getElementById('reuniao').value = ''
+    } else {
+        document.getElementById('divReuniao').style.display = "block"
+    }
 
-    // aplica imagem
-    img.style.backgroundImage = `url('${fundo}')`;
-
-    // ajusta tamanho da "folha"
-    img.style.width = type === "big" ? "297mm" : "210mm";
-    img.style.height = type === "big" ? "210mm" : "297mm";
+    // aplica imagem de fundo
+    img.style.backgroundImage = `url('${fundos[evento]}')`;
 
     montaPrisma();
 }
 
 function montaPrisma() {
+
+    const evento = document.querySelector('input[name="evento"]:checked').value;
+    const reuniao = document.getElementById('reuniao').value;
     const name = document.getElementById('name').value;
     const organ = document.getElementById('organ').value;
-    const position = document.getElementById('position').value;
-    const type = document.querySelector('input[name="type"]:checked').value;
-    const evento = document.querySelector('input[name="evento"]:checked').value;
-    const distanciaNome = Number(document.getElementById('distancia').value);
+    const cargo = document.getElementById('cargo').value;
 
-    const page = document.getElementById('a4Content');
-    const spaceCenter = document.getElementById('space-center');
-
+    //define os trem
+    const [reuniao1, reuniao2] = [document.getElementById('reuniao1'), document.getElementById('reuniao2')];
     const [name1, name2] = [document.getElementById('name1'), document.getElementById('name2')];
-    const [position1, position2] = [document.getElementById('position1'), document.getElementById('position2')];
+    const [cargo1, cargo2] = [document.getElementById('cargo1'), document.getElementById('cargo2')];
     const [organ1, organ2] = [document.getElementById('organ1'), document.getElementById('organ2')];
 
-    const fontPosition = document.querySelector('#fontPosition').value;
-    const fontOrgan = document.querySelector('#fontOrgan').value;
-    const fontName = document.querySelector('#fontName').value;
+    const spaceCenter = document.getElementById('space-center');
 
-    function aplicarFontSize(valor, elementos, fallback) {
-        const tamanho = parseInt(valor) || fallback;
-        elementos.forEach(el => el.style.fontSize = `${tamanho}px`);
+    //altera o tamanho da fonte do nome de acordo com o tamanho do nome
+    console.log(name.length)
+    if (name.length > 45) {
+        name1.style.fontSize = "30px"
+        name2.style.fontSize = "30px"
+    } else if (name.length > 35) {
+        name1.style.fontSize = "40px"
+        name2.style.fontSize = "40px"
+    } else if (name.length > 25) {
+        name1.style.fontSize = "50px"
+        name2.style.fontSize = "50px"
+    } else {
+        name1.style.fontSize = "65px"
+        name2.style.fontSize = "65px"
     }
 
-    // define tamanho inicial do nome
-    const fontNameSelect = document.querySelector('#fontName');
-    let tamanhoInicialNome = type === "big" ? 70 : 50;
-    fontNameSelect.value = String(tamanhoInicialNome);
-
-    aplicarFontSize(fontPosition, [position1, position2], 40);
-    aplicarFontSize(fontName, [name1, name2], tamanhoInicialNome);
-    aplicarFontSize(fontOrgan, [organ1, organ2], 30);
-
-    document.getElementById('distancia').disabled = false;
-
     // limpa textos
-    [name1, position1, organ1, name2, position2, organ2].forEach(el => el.innerText = '');
+    [reuniao1, name1, cargo1, organ1, reuniao2, name2, cargo2, organ2].forEach(el => el.innerText = '');
 
     // textos (espelhado)
-    [name1, position1, organ1].forEach(el => el.style.transform = 'rotate(180deg)');
+    [reuniao1, name1, cargo1, organ1].forEach(el => el.style.transform = 'rotate(180deg)');
 
-    name1.innerText = name;
-    position1.innerText = position;
-    organ1.innerText = organ;
-
-    name2.innerText = name;
-    position2.innerText = position;
-    organ2.innerText = organ;
+    [reuniao1, reuniao2].forEach(el => el.innerText = reuniao);
+    [name1, name2].forEach(el => el.innerText = name);
+    [cargo1, cargo2].forEach(el => el.innerText = cargo);
+    [organ1, organ2].forEach(el => el.innerText = organ);
 
     // define altura do espaço central
-    const alturas = {
-        big: { sudeco: 340, condel: 230, criff: 230 },
-        small: { sudeco: 300, coaride: 190, condel: 200 }
-    };
+    const alturas = { sudeco: 155, condel: 110, criff: 110, coaride: 130 };
+    spaceCenter.style.height = alturas[evento] + 'px';
 
-    const alturaBase = (alturas[type]?.[evento]) ?? 300;
-    spaceCenter.style.height = (alturaBase + distanciaNome) + 'px';
-
-    if (type === 'small')
-        page.style.paddingInline = '70px';
 }
 
 function generatePrisma() {
     montaPrisma();
-    const type = document.querySelector('input[name="type"]:checked').value;
     const name = document.getElementById('name').value;
-    const evento = document.querySelector('input[name="evento"]:checked').value;
-
-    const orientation = type === 'big' ? 'landscape' : 'portrait';
-
-    const nomes = {
-        big: {
-            condel: `prisma grande condel - ${name}.pdf`,
-            sudeco: `prisma grande sudeco - ${name}.pdf`,
-            criff: `prisma grande criff - ${name}.pdf`
-        },
-        small: {
-            sudeco: `prisma pequeno sudeco - ${name}.pdf`,
-            coaride: `prisma pequeno coaride - ${name}.pdf`,
-            condel: `prisma pequeno condel - ${name}.pdf`
-        }
-    };
-
-    const nameFile = nomes[type][evento] || `prisma - ${name}.pdf`;
+    const orientation = 'landscape'
+    const nameFile = `prisma - ${name}.pdf`;
 
     html2pdf().set({
         margin: 0,
@@ -158,9 +89,7 @@ function generatePrisma() {
 }
 
 function printPrisma() {
-    const type = document.querySelector('input[name="type"]:checked').value;
-    const orientation = type === 'big' ? 'landscape' : 'portrait';
-
+    const orientation = 'landscape'
     html2pdf().set({
         margin: 0,
         filename: 'document.pdf',
