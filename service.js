@@ -7,16 +7,21 @@ function trocaImagem() {
         sudeco: "./assets/papel/sudeco.png",
         condel: "./assets/papel/condel.png",
         coaride: "./assets/papel/coaride.png",
-        criff: "./assets/papel/criff.png"
+        criff: "./assets/papel/criff.png",
+        sudecoP: "./assets/papel/sudecoP.png"
     };
 
     //esconde o campo Nome da Reunião caso for Sudeco
-    if (evento == 'sudeco') {
+    if (evento == 'sudeco' || evento == 'sudecoP') {
         document.getElementById('divReuniao').style.display = "none"
         document.getElementById('reuniao').value = ''
     } else {
         document.getElementById('divReuniao').style.display = "block"
     }
+
+    //altera o tamanho da div se for imagem na vertical
+    img.style.width = evento === 'sudecoP' ? "210mm" : "297mm";
+    img.style.height = evento === 'sudecoP' ? "296mm" : "210mm";
 
     // aplica imagem de fundo
     img.style.backgroundImage = `url('${fundos[evento]}')`;
@@ -42,19 +47,15 @@ function montaPrisma() {
 
     //altera o tamanho da fonte do nome de acordo com o tamanho do nome
     console.log(name.length)
-    if (name.length > 45) {
-        name1.style.fontSize = "30px"
-        name2.style.fontSize = "30px"
-    } else if (name.length > 35) {
-        name1.style.fontSize = "40px"
-        name2.style.fontSize = "40px"
-    } else if (name.length > 25) {
-        name1.style.fontSize = "50px"
-        name2.style.fontSize = "50px"
-    } else {
-        name1.style.fontSize = "65px"
-        name2.style.fontSize = "65px"
-    }
+    const vertical = evento === "sudecoP";
+    const tamanho = name.length;
+
+    const fontSize = vertical
+        ? (tamanho > 32 ? "30px" : tamanho > 25 ? "40px" : tamanho > 18 ? "50px" : "65px")
+        : (tamanho > 45 ? "30px" : tamanho > 35 ? "40px" : tamanho > 25 ? "50px" : "65px");
+
+    name1.style.fontSize = fontSize;
+    name2.style.fontSize = fontSize;
 
     // limpa textos
     [reuniao1, name1, cargo1, organ1, reuniao2, name2, cargo2, organ2].forEach(el => el.innerText = '');
@@ -68,37 +69,75 @@ function montaPrisma() {
     [organ1, organ2].forEach(el => el.innerText = organ);
 
     // define altura do espaço central
-    const alturas = { sudeco: 155, condel: 110, criff: 110, coaride: 130 };
+    const alturas = { sudeco: 155, condel: 110, criff: 110, coaride: 130, sudecoP: 150 };
     spaceCenter.style.height = alturas[evento] + 'px';
 
 }
 
+
 function generatePrisma() {
     montaPrisma();
+
+    const evento = document.querySelector('input[name="evento"]:checked').value;
     const name = document.getElementById('name').value;
-    const orientation = 'landscape'
+
+    const orientation = evento === "sudecoP" ? "portrait" : "landscape";
+
     const nameFile = `prisma - ${name}.pdf`;
 
     html2pdf().set({
         margin: 0,
         filename: nameFile,
         image: { type: 'png', quality: 1.0 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation }
+        html2canvas: {
+            scale: 2,
+            scrollX: 0,
+            scrollY: 0,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: orientation
+        }
     }).from(document.getElementById('a4Content')).save();
 }
 
 function printPrisma() {
-    const orientation = 'landscape'
+    const evento = document.querySelector('input[name="evento"]:checked').value;
+
+    const orientation = evento === "sudecoP" ? "portrait" : "landscape";
+
     html2pdf().set({
         margin: 0,
-        filename: 'document.pdf',
         image: { type: 'png', quality: 1.0 },
-        html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation }
+        html2canvas: {
+            scale: 2,
+            scrollX: 0,
+            scrollY: 0,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: orientation
+        }
     })
         .from(document.getElementById('a4Content'))
-        .outputPdf('bloburl')
-        .then(pdfUrl => window.open(pdfUrl).print());
+        .toPdf()
+        .get('pdf')
+        .then(pdf => {
+            const pdfUrl = pdf.output('bloburl');
+            const printWindow = window.open(pdfUrl);
+
+            if (printWindow) {
+                printWindow.addEventListener('load', () => {
+                    printWindow.print();
+                });
+            } else {
+                alert('Permita pop-ups para imprimir o documento.');
+            }
+        });
 }
+
 document.addEventListener("load", trocaImagem());
